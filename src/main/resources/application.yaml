@@ -29,7 +29,7 @@ wicket:
 server.compression:
   enabled: true
   mime-types: application/atom+xml,text/html,text/xml,text/plain,text/css,text/javascript,application/javascript
- 
+
 bloggers.data.file.url: https://raw.githubusercontent.com/jvm-bloggers/jvm-bloggers/master/src/main/resources/blogs/bloggers.json
 companies.data.file.url: https://raw.githubusercontent.com/jvm-bloggers/jvm-bloggers/master/src/main/resources/blogs/companies.json
 presentations.data.file.url: https://raw.githubusercontent.com/jvm-bloggers/jvm-bloggers/master/src/main/resources/blogs/presentations.json
@@ -79,3 +79,7 @@ twitter.api:
 slack:
   invitation-link: https://join.slack.com/t/jvm-poland/shared_invite/enQtODE2ODgwMzU4NzA2LWUyZTIyZGRiOThjMDQ1NzI0OWVjZDVkZjc0ZjQ4OTZmMGM0NWNlNTQ3OTBhZmI5MGQ5Y2VlMmU1MGE4OGY2NTQ
 
+toxic-speech:
+  dictionaries:
+    polish: "https://raw.githubusercontent.com/MateoKost/wiki_scrapping_R/master/hatred_speech_words.csv"
+    english: "https://www.cs.cmu.edu/~biglou/resources/bad-words.txt"

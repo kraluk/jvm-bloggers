@@ -23,3 +23,8 @@ facebook:
   userToken: "fbUserToken"
   pageId: "fbPageId"
   appSecret: "fbAppSecret"
+
+toxic-speech:
+  dictionaries:
+    polish: "https://raw.githubusercontent.com/MateoKost/wiki_scrapping_R/master/hatred_speech_words.csv"
+    english: "https://www.cs.cmu.edu/~biglou/resources/bad-words.txt"
