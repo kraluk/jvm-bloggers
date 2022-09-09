@@ -55,6 +55,7 @@ scheduler:
   top-posts-in-month-summary: 0 0 13 12 * *
   publish-fb: 600000 # 10 minutes
   publish-twitter: 36000 # 5 minutes
+  update-toxic-words: 0 30 * * * *
 
 github.api:
   token: #Personal access tokens can be created under https://github.com/settings/tokens
@@ -80,6 +81,10 @@ slack:
   invitation-link: https://join.slack.com/t/jvm-poland/shared_invite/enQtODE2ODgwMzU4NzA2LWUyZTIyZGRiOThjMDQ1NzI0OWVjZDVkZjc0ZjQ4OTZmMGM0NWNlNTQ3OTBhZmI5MGQ5Y2VlMmU1MGE4OGY2NTQ
 
 toxic-speech:
+  detector:
+    enabled: true
+  updater:
+    enabled: true
   dictionaries:
     polish: "https://raw.githubusercontent.com/MateoKost/wiki_scrapping_R/master/hatred_speech_words.csv"
     english: "https://www.cs.cmu.edu/~biglou/resources/bad-words.txt"

@@ -1,24 +1,26 @@
-package com.jvm_bloggers.core.utils.speech;
+package com.jvm_bloggers.core.utils.toxic_speech;
 
-import com.jvm_bloggers.core.utils.speech.DictionaryReader.EnglishDictionaryReader;
-import com.jvm_bloggers.core.utils.speech.DictionaryReader.PolishDictionaryReader;
+import com.jvm_bloggers.entities.toxic_word.ToxicWord;
+
 import io.vavr.Function1;
 import io.vavr.collection.Set;
+
 import lombok.ToString;
+
 import org.springframework.web.reactive.function.client.WebClient;
 
 interface DictionaryAcquirer {
 
-    Set<String> acquire();
+    Set<ToxicWord> acquire();
 
     static DictionaryAcquirer polishAcquirer(final WebClient client,
                                              final String dictionaryPath) {
-        return new DefaultDictionaryAcquirer(client, dictionaryPath, PolishDictionaryReader::createFor);
+        return new DefaultDictionaryAcquirer(client, dictionaryPath, DictionaryReader::polishReader);
     }
 
     static DictionaryAcquirer englishAcquirer(final WebClient client,
                                               final String dictionaryPath) {
-        return new DefaultDictionaryAcquirer(client, dictionaryPath, EnglishDictionaryReader::createFor);
+        return new DefaultDictionaryAcquirer(client, dictionaryPath, DictionaryReader::englishReader);
     }
 
     // --- Implementations
@@ -28,26 +30,25 @@ interface DictionaryAcquirer {
 
         private final WebClient client;
         private final String dictionaryPath;
-
-        private final Function1<String, DictionaryReader> readerCreator;
+        private final Function1<String, DictionaryReader> reader;
 
         DefaultDictionaryAcquirer(final WebClient client,
                                   final String dictionaryPath,
-                                  final Function1<String, DictionaryReader> readerCreator) {
+                                  final Function1<String, DictionaryReader> reader) {
             this.client = client;
             this.dictionaryPath = dictionaryPath;
-            this.readerCreator = readerCreator;
+            this.reader = reader;
         }
 
         @Override
-        public Set<String> acquire() {
+        public Set<ToxicWord> acquire() {
             final var rawResult = client.get()
-                    .uri(dictionaryPath)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+                .uri(dictionaryPath)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
 
-            return readerCreator.apply(rawResult).read();
+            return reader.apply(rawResult).read();
         }
     }
 }

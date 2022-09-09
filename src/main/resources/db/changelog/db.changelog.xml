@@ -151,7 +151,7 @@
     <changeSet id="013-store-mailing-template-in-setting-table" author="Tomasz.Dziurko">
         <sqlFile path="insert_mailing_template.sql" relativeToChangelogFile="true"/>
     </changeSet>
-    
+
     <changeSet id="014-store-email-to-send-test-mail" author="Tomasz.Dziurko">
         <sql>
             INSERT INTO setting(id, name, value)
@@ -208,7 +208,7 @@
             VALUES (nextval('metadata_seq'), 'DATE_OF_LAST_FETCHING_BLOG_POSTS', '1970-01-01T00:00:00.000');
         </sql>
     </changeSet>
-    
+
     <changeSet id="023-add-url-column-into-blog-table" author="Jakub.Sprega">
         <addColumn tableName="blog">
             <column name="URL" type="varchar(250)"/>
@@ -222,7 +222,7 @@
             </column>
         </addColumn>
     </changeSet>
-    
+
     <changeSet id="025-update-mailing-templates-new-blog-url-comes-from-blog-entity" author="Jakub.Sprega">
         <sqlFile path="update_default_mailing_template_url_from_blog_entity.sql" relativeToChangelogFile="true"/>
     </changeSet>
@@ -273,7 +273,7 @@
     <changeSet id="030-update-mailing-templates-to-support-newsletter-issues" author="Tomasz.Dziurko">
         <sqlFile path="update_mailing_templates_to_introduce_newsletter_issues.sql" relativeToChangelogFile="true"/>
     </changeSet>
-    
+
     <changeSet id="031-create-email-table" author="Tomasz.Dziurko">
         <createSequence sequenceName="EMAIL_SEQ"/>
 
@@ -544,7 +544,7 @@
         </addColumn>
 
         <sql>update BLOG set MODERATION_REQUIRED = (CASE WHEN BLOG_TYPE = 'PERSONAL' THEN FALSE ELSE TRUE END)</sql>
-        
+
         <addNotNullConstraint tableName="BLOG" columnName="MODERATION_REQUIRED" columnDataType="boolean"/>
     </changeSet>
 
@@ -576,7 +576,7 @@
     <!--<changeSet id="047-add-polish-collation-to-author-column-in-blog-table" author="vlosrutere" dbms="postgresql">-->
         <!--<sql>ALTER TABLE BLOG ALTER COLUMN AUTHOR TYPE VARCHAR(250) COLLATE "pl_PL"</sql>-->
     <!--</changeSet>-->
-  
+
     <changeSet id="049-create-varia-suggestion-table" author="ajurasz">
         <createSequence sequenceName="VARIA_SUGGESTION_SEQ"/>
 
@@ -634,5 +634,25 @@
         <addForeignKeyConstraint baseTableName="POST_TAG" baseColumnNames="TAG_ID" constraintName="POST_TO_TAG" referencedTableName="TAG" referencedColumnNames="ID"/>
     </changeSet>
 
+    <changeSet id="054-toxic-words" author="kraluk">
+
+        <createSequence sequenceName="TOXIC_WORD_SEQ"/>
+
+        <createTable tableName="TOXIC_WORD">
+            <column name="ID" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LANGUAGE_CODE" type="varchar(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALUE" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_DATE" type="timestamp without time zone" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
 
 </databaseChangeLog>
