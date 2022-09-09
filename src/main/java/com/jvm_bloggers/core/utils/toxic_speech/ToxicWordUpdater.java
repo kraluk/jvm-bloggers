@@ -7,11 +7,16 @@ import io.vavr.Value;
 import io.vavr.collection.HashSet;
 import io.vavr.collection.List;
 import io.vavr.collection.Set;
+import io.vavr.control.Option;
 import io.vavr.control.Try;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import java.util.Objects;
 
 import static org.apache.commons.collections4.CollectionUtils.size;
 
@@ -20,15 +25,20 @@ class ToxicWordUpdater {
 
     private final ToxicWordRepository repository;
     private final List<DictionaryAcquirer> acquirers;
+    private final CacheManager cacheManager;
 
     ToxicWordUpdater(final ToxicWordRepository repository,
-                     final List<DictionaryAcquirer> acquirers) {
+                     final List<DictionaryAcquirer> acquirers,
+                     final CacheManager cacheManager) {
         this.repository = repository;
         this.acquirers = acquirers;
+        this.cacheManager = cacheManager;
     }
 
     @Scheduled(cron = "${scheduler.update-toxic-words}")
     void update() {
+        clearCache();
+
         acquirers
             .map(this::acquire)
             .flatMap(Value::toStream)
@@ -40,5 +50,11 @@ class ToxicWordUpdater {
             .onSuccess(s -> log.info("Got '{}' elements using '{}'", size(s), acquirer))
             .onFailure(t -> log.error("Unable to execute successfully the following acquirer - '{}'", acquirer, t))
             .getOrElse(HashSet::empty);
+    }
+
+    private void clearCache() {
+        Option.of(cacheManager.getCache(ToxicWordRepository.TOXIC_WORDS_CACHE))
+            .filter(Objects::nonNull)
+            .forEach(Cache::clear);
     }
 }
