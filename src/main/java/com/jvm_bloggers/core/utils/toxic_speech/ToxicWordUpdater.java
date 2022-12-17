@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Objects;
 
+import static com.jvm_bloggers.entities.toxic_word.ToxicWordRepository.TOXIC_WORDS_CACHE;
 import static org.apache.commons.collections4.CollectionUtils.size;
 
 @Slf4j
@@ -42,18 +44,24 @@ class ToxicWordUpdater {
         acquirers
             .map(this::acquire)
             .flatMap(Value::toStream)
-            .forEach(repository::upsert);
+            .flatMap(Value::toStream)
+            .toTry()
+            .map(w -> {
+                repository.upsert(w);
+                return null;
+            })
+            .onSuccess(i -> log.info(""))
+            .onFailure(t -> log.)
     }
 
-    private Set<ToxicWord> acquire(final DictionaryAcquirer acquirer) {
+    private Try<Set<ToxicWord>> acquire(final DictionaryAcquirer acquirer) {
         return Try.of(acquirer::acquire)
             .onSuccess(s -> log.info("Got '{}' elements using '{}'", size(s), acquirer))
-            .onFailure(t -> log.error("Unable to execute successfully the following acquirer - '{}'", acquirer, t))
-            .getOrElse(HashSet::empty);
+            .onFailure(t -> log.error("Unable to execute successfully the following acquirer - '{}'", acquirer, t));
     }
 
     private void clearCache() {
-        Option.of(cacheManager.getCache(ToxicWordRepository.TOXIC_WORDS_CACHE))
+        Option.of(cacheManager.getCache(TOXIC_WORDS_CACHE))
             .filter(Objects::nonNull)
             .forEach(Cache::clear);
     }

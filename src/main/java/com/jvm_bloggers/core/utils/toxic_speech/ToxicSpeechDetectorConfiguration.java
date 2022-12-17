@@ -1,12 +1,10 @@
 package com.jvm_bloggers.core.utils.toxic_speech;
 
-import com.jvm_bloggers.core.utils.toxic_speech.ToxicSpeechDetector.Holder.DefaultDetector;
-import com.jvm_bloggers.core.utils.toxic_speech.ToxicSpeechDetector.Holder.NoOpDetector;
+import com.jvm_bloggers.core.utils.toxic_speech.ToxicSpeechDetector.DefaultDetector;
+import com.jvm_bloggers.core.utils.toxic_speech.ToxicSpeechDetector.NoOpDetector;
 import com.jvm_bloggers.entities.toxic_word.ToxicWordRepository;
 
 import io.vavr.collection.List;
-
-import lombok.Value;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -50,18 +48,15 @@ class ToxicSpeechDetectorConfiguration {
 
     List<DictionaryAcquirer> dictionaryAcquirers(final WebClient webClient,
                                                  final Dictionaries dictionaries) {
-        final var polishAcquirer = polishAcquirer(webClient, dictionaries.getPolish());
-        final var englishAcquirer = englishAcquirer(webClient, dictionaries.getEnglish());
+        final var polishAcquirer = polishAcquirer(webClient, dictionaries.polish());
+        final var englishAcquirer = englishAcquirer(webClient, dictionaries.english());
 
         return List.of(polishAcquirer, englishAcquirer);
     }
 
     @ConstructorBinding
     @ConfigurationProperties(prefix = "toxic-speech.dictionaries")
-    @Value
-    static class Dictionaries {
-
-        String polish;
-        String english;
+    record Dictionaries(String polish,
+                        String english) {
     }
 }

@@ -40,6 +40,9 @@ interface DictionaryAcquirer {
             this.reader = reader;
         }
 
+        /**
+         * We're assuming that downloadable lists are very small, therefore we're able to download them completely at once
+         */
         @Override
         public Set<ToxicWord> acquire() {
             final var rawResult = client.get()

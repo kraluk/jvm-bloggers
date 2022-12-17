@@ -651,6 +651,9 @@
             <column name="CREATED_DATE" type="timestamp without time zone" defaultValueComputed="current_timestamp">
                 <constraints nullable="false"/>
             </column>
+            <column name="UPDATED_DATE" type="timestamp without time zone" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
     </changeSet>

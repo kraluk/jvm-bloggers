@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Access;
@@ -22,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Access(AccessType.FIELD)
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@ToString(of = {"languageCode", "value"})
+@ToString(of = {"languageCode", "value", "updatedDate"})
 public class ToxicWord {
 
     @Id
@@ -43,6 +44,9 @@ public class ToxicWord {
 
     @Column(name = "value", nullable = false)
     private String value;
+
+    @Column(name = "updated_date", nullable = false)
+    private Instant updatedDate;
 
     public ToxicWord(final SupportedLanguage language, final String value) {
         this.languageCode = language.getCode();
