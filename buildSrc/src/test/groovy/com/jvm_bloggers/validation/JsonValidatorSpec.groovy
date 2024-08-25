@@ -6,15 +6,15 @@ import spock.lang.Specification
 import spock.lang.Subject
 
 import java.nio.charset.StandardCharsets
-import java.util.function.Supplier
+import java.nio.file.Path
 
 @Subject(JsonValidator)
 class JsonValidatorSpec extends Specification {
 
     def "Should validate successfully given JSON file against given Schema"() {
         given:
-        def schemaSupplier = supplierOf(Jsons.SCHEMA)
-        def jsonSupplier = supplierOf(Jsons.VALID)
+        def schemaSupplier = tempPathOf(Jsons.SCHEMA)
+        def jsonSupplier = tempPathOf(Jsons.VALID)
 
         def validator = new JsonValidator(schemaSupplier, jsonSupplier)
 
@@ -27,8 +27,8 @@ class JsonValidatorSpec extends Specification {
 
     def "Should throw an exception when the validation is not ended successfully"() {
         given:
-        def schemaSupplier = supplierOf(Jsons.SCHEMA)
-        def jsonSupplier = supplierOf(Jsons.INVALID)
+        def schemaSupplier = tempPathOf(Jsons.SCHEMA)
+        def jsonSupplier = tempPathOf(Jsons.INVALID)
 
         def validator = new JsonValidator(schemaSupplier, jsonSupplier)
 
@@ -43,8 +43,8 @@ class JsonValidatorSpec extends Specification {
 
     def "Should throw an exception when the schema file is invalid"() {
         given:
-        def schemaSupplier = supplierOf("INVALID-SCHEMA")
-        def jsonSupplier = supplierOf("{}")
+        def schemaSupplier = tempPathOf("INVALID-SCHEMA")
+        def jsonSupplier = tempPathOf("{}")
 
         def validator = new JsonValidator(schemaSupplier, jsonSupplier)
 
@@ -60,8 +60,8 @@ class JsonValidatorSpec extends Specification {
 
     def "Should throw an exception when the input file is invalid"() {
         given:
-        def schemaSupplier = supplierOf("{}")
-        def jsonSupplier = supplierOf("INVALID-INPUT")
+        def schemaSupplier = tempPathOf("{}")
+        def jsonSupplier = tempPathOf("INVALID-INPUT")
 
         def validator = new JsonValidator(schemaSupplier, jsonSupplier)
 
@@ -74,9 +74,11 @@ class JsonValidatorSpec extends Specification {
         e.message == "Unable to process the JSON validation - probably the validated file and/or schema file have an invalid structure or format!"
         e.cause.class == JsonParseException.class
     }
-
-    private static Supplier<InputStream> supplierOf(final String content) {
-        () -> new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8))
+    
+    private static Path tempPathOf(final String content) {
+        def tempFile = Files.createTempFile("temp", ".json")
+        Files.write(tempFile, content.getBytes(StandardCharsets.UTF_8))
+        tempFile
     }
 
     private static class Jsons {

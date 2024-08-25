@@ -1,15 +1,14 @@
 import com.jvm_bloggers.validation.JsonValidationTask
-
 import java.nio.file.Paths
 import java.time.Duration
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 buildscript {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-    }
-
-    ext {
     }
 
     dependencies {
@@ -20,16 +19,16 @@ buildscript {
 }
 
 plugins {
-    id("application")
+    java
+    application
+    groovy
+    idea
+    eclipse
+    jacoco
     id("org.springframework.boot") version "2.7.18"
     id("io.spring.dependency-management") version "1.1.6"
-    id("java")
-    id("groovy")
-    id("idea")
-    id("eclipse")
     id("io.freefair.lombok") version "8.6"
     id("com.bmuschko.docker-spring-boot-application") version "9.4.0"
-    id("jacoco")
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
@@ -47,12 +46,10 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    wicketVersion = "9.18.0"
-    jerseyVersion = "2.43"
+object Versions {
+    const val WICKET = "9.18.0"
+    const val JERSEY = "2.43"
 }
-
-//sourceSets.main.resources.srcDir("src/main/java")
 
 dependencies {
     // Spring Boot stuff
@@ -74,13 +71,13 @@ dependencies {
 
     // View
     implementation("com.giffing.wicket.spring.boot.starter:wicket-spring-boot-starter:3.1.7")
-    implementation("org.apache.wicket:wicket-core:$wicketVersion")
-    implementation("org.apache.wicket:wicket-spring:$wicketVersion")
-    implementation("org.apache.wicket:wicket-ioc:$wicketVersion")
-    implementation("org.apache.wicket:wicket-devutils:$wicketVersion")
-    implementation("org.apache.wicket:wicket-auth-roles:$wicketVersion")
-    implementation("org.apache.wicket:wicket-bean-validation:$wicketVersion")
-    implementation("org.wicketstuff:wicketstuff-annotation:$wicketVersion")
+    implementation("org.apache.wicket:wicket-core:${Versions.WICKET}")
+    implementation("org.apache.wicket:wicket-spring:${Versions.WICKET}")
+    implementation("org.apache.wicket:wicket-ioc:${Versions.WICKET}")
+    implementation("org.apache.wicket:wicket-devutils:${Versions.WICKET}")
+    implementation("org.apache.wicket:wicket-auth-roles:${Versions.WICKET}")
+    implementation("org.apache.wicket:wicket-bean-validation:${Versions.WICKET}")
+    implementation("org.wicketstuff:wicketstuff-annotation:${Versions.WICKET}")
     implementation("com.googlecode.wicket-jquery-ui:wicket-jquery-ui:9.18.0")
     implementation("com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:9.18.0")
 
@@ -102,9 +99,9 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.14.0")
     implementation("org.apache.commons:commons-text:1.12.0")
     implementation("org.antlr:ST4:4.3.4")
-    implementation("org.glassfish.jersey.core:jersey-client:$jerseyVersion")
-    implementation("org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion")
-    implementation("org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion")
+    implementation("org.glassfish.jersey.core:jersey-client:${Versions.JERSEY}")
+    implementation("org.glassfish.jersey.media:jersey-media-json-jackson:${Versions.JERSEY}")
+    implementation("org.glassfish.jersey.inject:jersey-hk2:${Versions.JERSEY}")
     implementation("net.jcip:jcip-annotations:1.0")
     implementation("org.objenesis:objenesis:3.4")
     implementation("commons-validator:commons-validator:1.9.0")
@@ -113,7 +110,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.json:json:20240303")
     implementation("com.vdurmont:emoji-java:5.1.1") {
-        exclude group: "org.json", module: "json"
+        exclude(group = "org.json", module = "json")
     }
 
     // Database related
@@ -125,7 +122,7 @@ dependencies {
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: "com.vaadin.external.google", module: "android-json"
+        exclude(group = "com.vaadin.external.google", module = "android-json")
     }
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
     testImplementation("org.spockframework:spock-spring:2.3-groovy-4.0")
@@ -140,16 +137,12 @@ docker {
     springBootApplication {
         baseImage = "eclipse-temurin:21.0.3_9-jre-alpine"
         maintainer = "Tomasz Dziurko \"tdziurko at gmail dottt com\""
-        ports = [8080, 8080]
-        images = [
-                "jvmbloggers/jvm-bloggers:" + project.version + "-" + getTimestampWithGitHash(),
-                "jvmbloggers/jvm-bloggers:latest"
-        ]
-        jvmArgs = ["--add-opens", "java.base/java.lang=ALL-UNNAMED", "-Dwicket.ioc.useByteBuddy=true"]
-    }
-
-    dockerCreateDockerfile {
-        instruction "RUN apk update && apk add ca-certificates && update-ca-certificates && apk add openssl"
+        ports = listOf(8080, 8080)
+        images = setOf(
+            "jvmbloggers/jvm-bloggers:" + project.version + "-" + getTimestampWithGitHash(),
+            "jvmbloggers/jvm-bloggers:latest"
+        )
+        jvmArgs = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED", "-Dwicket.ioc.useByteBuddy=true")
     }
 
     registryCredentials {
@@ -159,19 +152,24 @@ docker {
     }
 }
 
-bootRun {
-    systemProperties = System.properties as Map<String, ?>
-    jvmArgs = ["--add-opens", "java.base/java.lang=ALL-UNNAMED"]
+tasks.dockerCreateDockerfile {
+    instruction("RUN apk update && apk add ca-certificates && update-ca-certificates && apk add openssl")
 }
 
-test {
+tasks.bootRun {
+    @Suppress("UNCHECKED_CAST")
+    systemProperties = System.getProperties() as Map<String, Any>
+    jvmArgs = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+}
+
+tasks.test {
     systemProperty("file.encoding", "utf-8")
     dependsOn("validateBlogsData")
     useJUnitPlatform()
-    jvmArgs = ["--add-opens", "java.base/jdk.internal.loader=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED"]
+    jvmArgs = listOf("--add-opens", "java.base/jdk.internal.loader=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-jacocoTestReport {
+tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         csv.required.set(false)
@@ -180,28 +178,13 @@ jacocoTestReport {
 
 idea {
     module {
-        downloadJavadoc = true
-        downloadSources = true
+        isDownloadJavadoc = true
+        isDownloadSources = true
     }
 }
 
-tasks.named("dependencyUpdates").configure {
+tasks.dependencyUpdates {
     timeout.set(Duration.ofMillis(10000))
-}
-
-task validateBlogsData() {
-    def blogsDir = Paths.get("${projectDir}", "src", "main", "resources", "blogs")
-    def schema = blogsDir.resolve("schema.json")
-
-    def blogsData = ["bloggers", "presentations", "companies", "podcasts"]
-
-    blogsData.each { fileName ->
-        def taskName = "validate" + fileName.capitalize()
-        def json = blogsDir.resolve("${fileName}.json")
-
-        tasks.register(taskName, JsonValidationTask.class, schema, json)
-        dependsOn(taskName)
-    }
 }
 
 tasks.register("stage") {
@@ -209,14 +192,34 @@ tasks.register("stage") {
     mustRunAfter("clean")
 }
 
-String getConfigurationProperty(String envVar, String sysProp) {
-    System.getenv(envVar) ?: project.findProperty(sysProp)
+tasks.register("validateBlogsData") {
+    val blogsDir = Paths.get("$projectDir", "src", "main", "resources", "blogs")
+    val schema = blogsDir.resolve("schema.json")
+
+    val blogsData = listOf("bloggers", "presentations", "companies", "podcasts")
+
+    blogsData.forEach { fileName ->
+        val taskName = "validate" + fileName.replaceFirstChar { it.uppercase() }
+        val json = blogsDir.resolve("${fileName}.json")
+
+        tasks.register(taskName, JsonValidationTask::class.java, schema, json)
+        dependsOn(taskName) // dependsOn?
+    }
 }
 
-static String getTimestampWithGitHash() {
-    String timeStamp = new Date().format("yyyyMMdd-HHmmss")
-    String cmd = "git log --pretty=format:%h -n 1"
-    def proc = cmd.execute()
+fun getConfigurationProperty(envVar: String, sysProp: String): String =
+    System.getenv(envVar) ?: project.findProperty(sysProp).toString()
+
+
+fun getTimestampWithGitHash(): String {
+    val timeStamp: String = DateTimeFormatter
+        .ofPattern("yyyyMMdd-HHmmss")
+        .withZone(ZoneOffset.UTC)
+        .format(Instant.now())
+
+    val cmd = "git log --pretty=format:%h -n 1"
+    val proc = Runtime.getRuntime().exec(cmd)
+
     proc.waitFor()
-    return timeStamp + "-" + proc.in.text
+    return "$timeStamp-${proc.inputStream.bufferedReader().readText().trim()}"
 }
