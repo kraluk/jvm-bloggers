@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 
 @Component
 public class SyndFeedJsonMessageConverter extends AbstractHttpMessageConverter<SyndFeed> {
@@ -23,7 +20,7 @@ public class SyndFeedJsonMessageConverter extends AbstractHttpMessageConverter<S
 
     @Autowired
     public SyndFeedJsonMessageConverter(SyndFeedToJsonConverter converter) {
-        super(APPLICATION_JSON, APPLICATION_JSON_UTF8);
+        super(APPLICATION_JSON, APPLICATION_JSON);
 
         this.converter = converter;
     }
@@ -34,7 +31,8 @@ public class SyndFeedJsonMessageConverter extends AbstractHttpMessageConverter<S
     }
 
     @Override
-    protected SyndFeed readInternal(Class<? extends SyndFeed> clazz, HttpInputMessage inputMessage) {
+    protected SyndFeed readInternal(Class<? extends SyndFeed> clazz,
+                                    HttpInputMessage inputMessage) {
         throw new UnsupportedOperationException(
             "Reading SyndFeed from a JSON file is currently not supported!");
     }
