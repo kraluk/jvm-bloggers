@@ -10,9 +10,12 @@ import com.jvm_bloggers.entities.top_posts_summary.PopularPersonalPost;
 import com.jvm_bloggers.entities.top_posts_summary.TopPostsSummary;
 import com.jvm_bloggers.entities.top_posts_summary.TopPostsSummaryRepository;
 import com.jvm_bloggers.utils.NowProvider;
+
 import io.vavr.collection.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -93,7 +96,8 @@ class GenerateTopPostsInMonthSummaryCommandHandler
             .map(postWithIndex -> {
                 long position = (long) postWithIndex._2 + 1;
                 PostIdWithCount postIdWithCount = postWithIndex._1;
-                BlogPost post = blogPostRepository.getOne(postIdWithCount.getBlogPostId());
+                BlogPost post =
+                    blogPostRepository.getReferenceById(postIdWithCount.getBlogPostId());
                 return new PopularPersonalPost(post, position, postIdWithCount.getCount());
             });
     }
@@ -114,7 +118,8 @@ class GenerateTopPostsInMonthSummaryCommandHandler
             .map(postWithIndex -> {
                 long position = (long) postWithIndex._2 + 1;
                 PostIdWithCount postIdWithCount = postWithIndex._1;
-                BlogPost post = blogPostRepository.getOne(postIdWithCount.getBlogPostId());
+                BlogPost post =
+                    blogPostRepository.getReferenceById(postIdWithCount.getBlogPostId());
                 return new PopularCompanyPost(post, position, postIdWithCount.getCount());
             });
     }
