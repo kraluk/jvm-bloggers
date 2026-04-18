@@ -8,7 +8,7 @@ import spock.lang.Subject
 import spock.lang.Unroll
 
 import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -35,13 +35,13 @@ class BlogPostsControllerSpec extends SpringContextAwareSpecification {
             .andExpect(content().contentType(mediaType))
 
         where:
-        endpoint         | format || mediaType
-        "/pl/rss"        | ".json" || APPLICATION_JSON_UTF8_VALUE
+        endpoint         | format  || mediaType
+        "/pl/rss"        | ".json" || APPLICATION_JSON_VALUE
         "/pl/rss"        | ".xml"  || APPLICATION_ATOM_XML_VALUE
-        "/pl/rss"        | ""     || APPLICATION_ATOM_XML_VALUE
-        "/pl/issues-rss" | ".json" || APPLICATION_JSON_UTF8_VALUE
+        "/pl/rss"        | ""      || APPLICATION_ATOM_XML_VALUE
+        "/pl/issues-rss" | ".json" || APPLICATION_JSON_VALUE
         "/pl/issues-rss" | ".xml"  || APPLICATION_ATOM_XML_VALUE
-        "/pl/issues-rss" | ""     || APPLICATION_ATOM_XML_VALUE
+        "/pl/issues-rss" | ""      || APPLICATION_ATOM_XML_VALUE
     }
 
 }
