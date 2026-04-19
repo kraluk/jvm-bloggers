@@ -5,7 +5,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 @ContextConfiguration
 @SpringBootTest

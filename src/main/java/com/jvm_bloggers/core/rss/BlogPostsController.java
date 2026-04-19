@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
