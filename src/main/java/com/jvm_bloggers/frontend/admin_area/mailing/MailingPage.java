@@ -11,7 +11,7 @@ import com.jvm_bloggers.frontend.common_components.NonNullWysiwygEditor;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalDialog;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
@@ -67,7 +67,7 @@ public class MailingPage extends AbstractMailingPage {
 
     private void addForm() {
         Metadata initialSectionToEdit = backingBean
-            .findMetadataByName(TEMPLATE_SECTION_KEYS.get(0));
+            .findMetadataByName(TEMPLATE_SECTION_KEYS.getFirst());
         mailingTemplateForm = new Form<>(MAILING_TEMPLATE_FORM_ID, Model.of(initialSectionToEdit));
         mailingTemplateForm.setOutputMarkupId(true);
         add(mailingTemplateForm);
@@ -155,7 +155,7 @@ public class MailingPage extends AbstractMailingPage {
 
                 @Override
                 public boolean isVisible() {
-                    return TEMPLATE_SECTION_KEYS.get(0)
+                    return TEMPLATE_SECTION_KEYS.getFirst()
                         .equals(newsletterSectionToEditDropdown.getModelObject());
                 }
             };
@@ -163,18 +163,18 @@ public class MailingPage extends AbstractMailingPage {
     }
 
     private void addPreviewTemplateModal() {
-        ModalWindow mailingPreviewModalWindow = new ModalWindow("mailingPreviewModal");
+        ModalDialog mailingPreviewModalWindow = new ModalDialog("mailingPreviewModal");
         mailingTemplateForm.add(mailingPreviewModalWindow);
 
         mailingPreviewModalWindow
-            .setContent(new MailingTemplatePreviewPanel(mailingPreviewModalWindow.getContentId()));
-        mailingPreviewModalWindow.setTitle("Mailing preview");
-        mailingPreviewModalWindow.setCookieName("mailing-preview-modal");
+            .setContent(new MailingTemplatePreviewPanel(ModalDialog.CONTENT_ID));
+        // mailingPreviewModalWindow.setTitle("Mailing preview");
+        // mailingPreviewModalWindow.setCookieName("mailing-preview-modal");
 
         AjaxButton previewButton = new AjaxButton("previewButton", mailingTemplateForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                mailingPreviewModalWindow.show(target);
+                mailingPreviewModalWindow.open(target);
             }
         };
         mailingTemplateForm.add(previewButton);
