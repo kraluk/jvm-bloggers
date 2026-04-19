@@ -37,8 +37,8 @@ public class JvmBloggersApplication extends WicketBootSecuredWebApplication {
     protected void init() {
         super.init();
 
-        setHeaderResponseDecorator(response ->
-            new ResourceAggregator(
+        getHeaderResponseDecorators().add(
+            response -> new ResourceAggregator(
               new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container")
             )
         );

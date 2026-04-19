@@ -48,7 +48,7 @@ repositories {
 }
 
 ext {
-    wicketVersion = '9.18.0'
+    wicketVersion = '10.0.0'
     jerseyVersion = '3.1.11'
 }
 
@@ -73,7 +73,7 @@ dependencies {
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
 
     // View
-    implementation 'com.giffing.wicket.spring.boot.starter:wicket-spring-boot-starter:3.1.7'
+    implementation 'com.giffing.wicket.spring.boot.starter:wicket-spring-boot-starter:4.0.0-M1'
     implementation "org.apache.wicket:wicket-core:$wicketVersion"
     implementation "org.apache.wicket:wicket-spring:$wicketVersion"
     implementation "org.apache.wicket:wicket-ioc:$wicketVersion"
@@ -81,8 +81,8 @@ dependencies {
     implementation "org.apache.wicket:wicket-auth-roles:$wicketVersion"
     implementation "org.apache.wicket:wicket-bean-validation:$wicketVersion"
     implementation "org.wicketstuff:wicketstuff-annotation:$wicketVersion"
-    implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui:9.18.0"
-    implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:9.18.0"
+    implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui:10.0.0-M1"
+    implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:10.0.0-M1"
 
     implementation 'de.agilecoders.wicket.webjars:wicket-webjars:3.0.7'
     implementation 'org.webjars:jquery:3.6.3'
@@ -130,6 +130,7 @@ dependencies {
     testImplementation 'com.jayway.jsonpath:json-path:2.9.0'
     testImplementation 'org.codehaus.groovy:groovy:3.0.25'
     testImplementation 'org.codehaus.groovy:groovy-json:3.0.25'
+    testImplementation "org.apache.wicket:wicket-tester:$wicketVersion"
     testRuntimeOnly 'com.h2database:h2'
 }
 

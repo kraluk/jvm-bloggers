@@ -31,7 +31,7 @@ abstract class MockSpringContextAwareSpecification extends Specification {
 
     def setup() {
         WebApplication webApp = tester.getApplication()
-        webApp.setHeaderResponseDecorator(new IHeaderResponseDecorator() {
+        webApp.getHeaderResponseDecorators().add(new IHeaderResponseDecorator() {
             @Override
             IHeaderResponse decorate(IHeaderResponse response) {
                 return new ResourceAggregator(
