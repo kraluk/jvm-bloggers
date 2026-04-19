@@ -6,9 +6,9 @@ import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsF
 
 import org.springframework.cache.CacheManager;
 
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
+import jakarta.persistence.PostUpdate;
 
 public class BlogPostEntityListener {
 

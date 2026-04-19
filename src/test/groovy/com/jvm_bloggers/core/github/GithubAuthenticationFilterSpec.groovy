@@ -4,10 +4,10 @@ import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import javax.ws.rs.client.ClientRequestContext
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MultivaluedHashMap
-import javax.ws.rs.core.MultivaluedMap
+import jakarta.ws.rs.client.ClientRequestContext
+import jakarta.ws.rs.core.HttpHeaders
+import jakarta.ws.rs.core.MultivaluedHashMap
+import jakarta.ws.rs.core.MultivaluedMap
 
 @Subject(GithubAuthenticationFilter)
 class GithubAuthenticationFilterSpec extends Specification {
