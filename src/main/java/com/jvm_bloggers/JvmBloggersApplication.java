@@ -10,7 +10,6 @@ import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.devutils.stateless.StatelessChecker;
-import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -38,9 +37,7 @@ public class JvmBloggersApplication extends WicketBootSecuredWebApplication {
         super.init();
 
         getHeaderResponseDecorators().add(
-            response -> new ResourceAggregator(
-              new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container")
-            )
+            response -> new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container")
         );
         getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         new AnnotatedMountScanner().scanPackage("com.jvm_bloggers").mount(this);
