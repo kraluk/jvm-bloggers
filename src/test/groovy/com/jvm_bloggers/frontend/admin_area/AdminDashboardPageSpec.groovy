@@ -7,6 +7,7 @@ import org.apache.wicket.util.tester.FormTester
 
 import java.time.YearMonth
 
+import static com.jvm_bloggers.frontend.WicketTestUtils.headOf
 import static com.jvm_bloggers.frontend.admin_area.AdminDashboardPage.GENERATE_TOP_POSTS_SUMMARY_FORM_ID
 import static com.jvm_bloggers.frontend.admin_area.AdminDashboardPage.YEAR_MONTH_SELECTOR_ID
 
@@ -38,6 +39,22 @@ class AdminDashboardPageSpec extends MockSpringContextAwareSpecification {
 
         then:
         1 * backingBean.generateTopPostsSummary(_ as YearMonth)
+    }
+
+    def "should render page head with admin webjar stylesheets"() {
+        given:
+        currentUserIsAdmin()
+
+        when:
+        tester.startPage(AdminDashboardPage)
+
+        then:
+        String head = headOf(tester.getLastResponseAsString())
+
+        and:
+        head.contains("/webjars/bootstrap/css/bootstrap.min.css")
+        head.contains("/webjars/startbootstrap-sb-admin-2/css/sb-admin-2.min.css")
+        head.contains("/webjars/font-awesome/css/font-awesome.min.css")
     }
 
 }

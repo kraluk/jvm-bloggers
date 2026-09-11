@@ -13,6 +13,7 @@ import java.time.LocalDate
 import java.util.function.Consumer
 
 import static com.jvm_bloggers.domain.query.NewsletterIssueNumber.of
+import static com.jvm_bloggers.frontend.WicketTestUtils.headOf
 import static com.jvm_bloggers.frontend.public_area.HomePage.LATEST_ISSUE_PANEL_ID
 import static com.jvm_bloggers.utils.DateTimeUtilities.DATE_FORMATTER
 import static io.vavr.collection.List.empty
@@ -103,6 +104,28 @@ class HomePageSpec extends MockSpringContextAwareSpecification {
 
     private NewsletterIssueForListing createIssueForListing(int i) {
         return new NewsletterIssueForListing(of(i), LocalDate.now())
+    }
+
+    def "Should render page head with title, stylesheets and social meta tags"() {
+        given:
+        mockEmptyLatestIssue()
+
+        when:
+        tester.startPage(HomePage)
+
+        then:
+        String head = headOf(tester.getLastResponseAsString())
+
+        and: "title rendered by the pageTitle label"
+        head.contains("JVM Bloggers - Najnowsze wydanie newslettera</title>")
+
+        and: "stylesheets declared in the page markup"
+        head.contains("assets/css/style.css")
+        head.contains("assets/css/custom.css")
+
+        and: "meta tags contributed via renderHead"
+        head.contains('property="og:title"')
+        head.contains('property="twitter:title"')
     }
 
     def "Should show appropriate message on right panel, when no newsletters"() {
