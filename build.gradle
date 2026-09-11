@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:3.0.13"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:3.2.11"
         classpath "com.bmuschko:gradle-docker-plugin:10.0.0"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.53.0"
     }
@@ -21,7 +21,7 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'org.springframework.boot' version '3.0.13'
+    id 'org.springframework.boot' version '3.2.11'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'groovy'
