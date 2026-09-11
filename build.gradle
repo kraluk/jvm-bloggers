@@ -52,6 +52,7 @@ ext {
     jerseyVersion = '3.1.11'
 }
 ext['liquibase.version'] = '4.20.0' // temporary to fix issues with 4.17.0
+ext['jersey.version'] = jerseyVersion // align jersey-common with the explicitly pinned modules
 
 sourceSets.main.resources.srcDir 'src/main/java'
 
@@ -85,7 +86,7 @@ dependencies {
     implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui:10.0.0-M1"
     implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:10.0.0-M1"
 
-    implementation 'de.agilecoders.wicket.webjars:wicket-webjars:3.0.7'
+    implementation 'de.agilecoders.wicket.webjars:wicket-webjars:4.0.15'
     implementation 'org.webjars:jquery:3.6.3'
     implementation 'org.webjars:webjars-locator:0.52'
 
