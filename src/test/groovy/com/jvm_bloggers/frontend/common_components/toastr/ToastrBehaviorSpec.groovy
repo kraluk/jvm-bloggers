@@ -5,6 +5,8 @@ import com.jvm_bloggers.frontend.public_area.common_layout.RightFrontendSidebarB
 import com.jvm_bloggers.frontend.public_area.varia_suggestion.VariaSuggestionPage
 import com.jvm_bloggers.frontend.public_area.varia_suggestion.VariaSuggestionPageBackingBean
 
+import static com.jvm_bloggers.frontend.WicketTestUtils.headOf
+
 class ToastrBehaviorSpec extends MockSpringContextAwareSpecification {
 
     @Override
@@ -13,13 +15,15 @@ class ToastrBehaviorSpec extends MockSpringContextAwareSpecification {
         addBean(Stub(VariaSuggestionPageBackingBean))
     }
 
-//    def "Should add toast to page"() {
-//        when:
-//        tester.startPage(VariaSuggestionPage)
-//        String responseAsString = tester.getLastResponseAsString()
-//
-//        then:
-//        responseAsString.contains('toastr.min.css')
-//        responseAsString.contains('toastr.min.js')
-//    }
+    def "Should add toast to page"() {
+        when:
+        tester.startPage(VariaSuggestionPage)
+        String head = headOf(tester.getLastResponseAsString())
+
+        then:
+        head.contains('toastr.min.css')
+
+        and:
+        tester.getLastResponseAsString().contains('toastr.min.js')
+    }
 }

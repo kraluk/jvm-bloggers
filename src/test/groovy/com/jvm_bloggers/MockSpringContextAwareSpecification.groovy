@@ -7,7 +7,6 @@ import de.agilecoders.wicket.webjars.settings.WebjarsSettings
 import org.apache.wicket.authroles.authorization.strategies.role.Roles
 import org.apache.wicket.bean.validation.BeanValidationConfiguration
 import org.apache.wicket.markup.head.IHeaderResponse
-import org.apache.wicket.markup.head.ResourceAggregator
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse
 import org.apache.wicket.markup.html.IHeaderResponseDecorator
 import org.apache.wicket.mock.MockApplication
@@ -34,9 +33,7 @@ abstract class MockSpringContextAwareSpecification extends Specification {
         webApp.getHeaderResponseDecorators().add(new IHeaderResponseDecorator() {
             @Override
             IHeaderResponse decorate(IHeaderResponse response) {
-                return new ResourceAggregator(
-                    new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container")
-                );
+                return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container");
             }
         })
         webApp.getComponentInstantiationListeners()
