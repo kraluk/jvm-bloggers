@@ -56,3 +56,13 @@ tr.highlighted-post > td:first-child > span {
     height: 400px;
     max-height: 400px;
 }
+.modal-dialog-content {
+    width: 60vw;
+    padding: 20px;
+}
+
+.modal-dialog-content .mailing-preview-title {
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e7e7e7;
+}

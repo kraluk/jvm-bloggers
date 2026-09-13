@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalDialog;
+import org.apache.wicket.extensions.ajax.markup.html.modal.theme.DefaultTheme;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
@@ -164,6 +165,8 @@ public class MailingPage extends AbstractMailingPage {
 
     private void addPreviewTemplateModal() {
         ModalDialog mailingPreviewModalWindow = new ModalDialog("mailingPreviewModal");
+        mailingPreviewModalWindow.add(new DefaultTheme());
+        mailingPreviewModalWindow.closeOnEscape().closeOnClick().trapFocus();
         mailingTemplateForm.add(mailingPreviewModalWindow);
 
         mailingPreviewModalWindow
