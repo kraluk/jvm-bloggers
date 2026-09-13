@@ -48,7 +48,7 @@ repositories {
 }
 
 ext {
-    wicketVersion = '10.0.0'
+    wicketVersion = '10.6.0'
     jerseyVersion = '3.1.11'
 }
 ext['liquibase.version'] = '4.20.0' // temporary to fix issues with 4.17.0
@@ -83,10 +83,10 @@ dependencies {
     implementation "org.apache.wicket:wicket-auth-roles:$wicketVersion"
     implementation "org.apache.wicket:wicket-bean-validation:$wicketVersion"
     implementation "org.wicketstuff:wicketstuff-annotation:$wicketVersion"
-    implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui:10.0.0-M1"
+    // only the wysiwyg editor on the admin mailing page; 10.0.0-M1 is the sole Wicket 10 release
     implementation "com.googlecode.wicket-jquery-ui:wicket-jquery-ui-plugins:10.0.0-M1"
 
-    implementation 'de.agilecoders.wicket.webjars:wicket-webjars:4.0.15'
+    implementation 'de.agilecoders.wicket.webjars:wicket-webjars:4.0.12'
     implementation 'org.webjars:jquery:3.6.3'
     implementation 'org.webjars:webjars-locator:0.52'
 

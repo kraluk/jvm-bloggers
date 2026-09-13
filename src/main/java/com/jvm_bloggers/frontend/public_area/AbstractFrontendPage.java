@@ -7,6 +7,7 @@ import com.jvm_bloggers.frontend.public_area.social_meta_data.SocialMetaData;
 import com.jvm_bloggers.frontend.public_area.social_meta_data.SocialMetaDataHeadRenderer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -51,6 +52,8 @@ public abstract class AbstractFrontendPage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(
+            getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
         new SocialMetaDataHeadRenderer(getSocialMetaTags()).renderTo(response);
     }
 

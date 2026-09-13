@@ -21,7 +21,6 @@ public class InfiniteScrollingBehavior extends Behavior {
 
     private static final String AJAX_INTERCEPTOR = "js/ajax-request-interceptor.js";
 
-    // FIXME: 10.01.2020 Hardcoded version number, for some reason `current` was resolved to null
     private static final String INFINITE_SCROLL = "infinite-scroll/current/dist/infinite-scroll.pkgd.min.js";
 
     private static final String

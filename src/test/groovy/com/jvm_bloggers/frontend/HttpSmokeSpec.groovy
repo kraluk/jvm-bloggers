@@ -91,6 +91,24 @@ class HttpSmokeSpec extends Specification {
     }
 
     @Unroll
+    def "Should load jQuery exactly once on #path"() {
+        when:
+        String body = restTemplate.getForEntity(path, String).body
+
+        then:
+        jQueryLoadsIn(body) == 1
+
+        where:
+        path << ["/", "/about", "/blogs", "/top-articles", "/all-issues", "/contributors", "/login"]
+    }
+
+    private static int jQueryLoadsIn(String body) {
+        return (body =~ /src="([^"]*)"/)
+            .collect { it[1] }
+            .count { it.toLowerCase().contains("jquery") && !it.contains("wicket-ajax-jquery") }
+    }
+
+    @Unroll
     def "Should serve webjar resource #path referenced from page markup"() {
         when:
         ResponseEntity<String> response = restTemplate.getForEntity(path, String)

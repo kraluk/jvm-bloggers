@@ -13,7 +13,6 @@ class JvmBloggersWebConfiguration implements WebMvcConfigurer {
     @Override
     public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {
         configurer
-            .favorPathExtension(true)
             .favorParameter(false)
             .ignoreAcceptHeader(false)
             .defaultContentType(APPLICATION_ATOM_XML)

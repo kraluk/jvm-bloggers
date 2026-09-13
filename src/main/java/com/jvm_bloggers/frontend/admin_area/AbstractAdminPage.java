@@ -9,6 +9,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -40,6 +42,13 @@ public abstract class AbstractAdminPage extends WebPage {
         add(new BookmarkablePageLink<>("moderationLink", ModerationPage.class));
         add(new BookmarkablePageLink<>("blogsLink", BlogsPage.class));
         add(new DebugBar("debug"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(
+            getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
     }
 
     private Component createFooterContainer() {

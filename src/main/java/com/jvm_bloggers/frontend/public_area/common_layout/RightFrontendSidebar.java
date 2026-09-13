@@ -1,6 +1,5 @@
 package com.jvm_bloggers.frontend.public_area.common_layout;
 
-import com.googlecode.wicket.jquery.ui.markup.html.link.BookmarkablePageLink;
 import com.jvm_bloggers.domain.query.newsletter_issue_for_listing.NewsletterIssueForListing;
 import com.jvm_bloggers.frontend.common_components.NewsletterIssueLink;
 import com.jvm_bloggers.frontend.public_area.all_issues.AllIssuesPage;
@@ -10,6 +9,7 @@ import com.jvm_bloggers.frontend.public_area.varia_suggestion.VariaSuggestionPag
 import io.vavr.collection.Seq;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;

@@ -168,8 +168,6 @@ public class MailingPage extends AbstractMailingPage {
 
         mailingPreviewModalWindow
             .setContent(new MailingTemplatePreviewPanel(ModalDialog.CONTENT_ID));
-        // mailingPreviewModalWindow.setTitle("Mailing preview");
-        // mailingPreviewModalWindow.setCookieName("mailing-preview-modal");
 
         AjaxButton previewButton = new AjaxButton("previewButton", mailingTemplateForm) {
             @Override
